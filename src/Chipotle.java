@@ -2,6 +2,9 @@ import java.util.*;
 
 public class Chipotle {
     public static void main (String[] args) {
+        //Variables
+
+        //These String arrays store the various ingredients in their own category
         String[] rice = {"white rice", "brown rice", "no rice", "all rice"};
         String[] meat = {"chicken", "steak", "carnidas", "chorizo", "sofritas", "veggie meat", "no meat", "all meat"};
         String[] beans = {"pinto beans", "black beans", "no beans", "all beans"};
@@ -12,8 +15,19 @@ public class Chipotle {
         String[] queso = {"queso"};
         String[] sourCream = {"sour cream"};
 
-        int five = 0, six = 0, seven = 0, eight = 0, nine = 0;
+        Random random = new Random();
+        double price = 3.00;            //base burrito costs $3.00 regardless of ingredients
+        double totalPrice = 0;
+        //Stores specific ingredients used in each burrito so they can be totaled up later
+        ArrayList<String> listOfIngredients = new ArrayList<String>();
 
+        //Contains a random list of ingredients (5-9). The ingredients are non-repeating
+        ArrayList<String> burrito = new ArrayList<String>();
+
+        //2D ArrayList to store multiple "burritos"
+        ArrayList<ArrayList<String>> order = new ArrayList<ArrayList<String>>();
+
+        HashMap<String, Integer> ingredientList = new HashMap<String, Integer>();
 
         ArrayList<String[]> ingredients = new ArrayList<String[]>();
         ingredients.add(rice);
@@ -26,43 +40,22 @@ public class Chipotle {
         ingredients.add(queso);
         ingredients.add(sourCream);
 
-        Random random = new Random();
-        double price = 3.00;
-        ArrayList<String> burrito = new ArrayList<String>();
-
-        /*  Used to make sure that the number of ingredients was truly random
-        for (int i = 0; i < 1000; i++) {
-            burrito = makeBurrito(random, ingredients);
-            switch (burrito.size()) {
-                case 5:
-                    five++;
-                    break;
-                case 6:
-                    six++;
-                    break;
-                case 7:
-                    seven++;
-                    break;
-                case 8:
-                    eight++;
-                    break;
-                case 9:
-                    nine++;
-                    break;
-                default:
-                    break;
-            }
-            //System.out.println("Burrito " + (i + 1) + " " + burrito);
-        }
-         */
-
-
+        //creates 25 burritos and stores them in the "order" ArrayList and calculates total price
         for (int i = 0; i < 25; i++) {
             burrito = makeBurrito(random, ingredients);
             price = calculatePrice(burrito);
+            totalPrice += price;
+            order.add(burrito);
             System.out.println("Burrito " + (i + 1) + " " + burrito + " \t$" + price + "0");
         }
 
+        //prints how many of each ingredient was used, as well as the total price
+        listOfIngredients = getIngredientsList(order, ingredientList);
+        System.out.println("This order has: ");
+        for (int i = 0; i < listOfIngredients.size(); i++) {
+            System.out.print(listOfIngredients.get(i) + ", ");
+        }
+        System.out.println("and the sum is $" + totalPrice + "0");
     }
 
     public static ArrayList<String> makeBurrito(Random random, ArrayList<String[]> ingredients) {
@@ -94,5 +87,28 @@ public class Chipotle {
             }
         }
         return price;
+    }
+
+    public static ArrayList<String> getIngredientsList (ArrayList<ArrayList<String>> order,
+                                             HashMap<String, Integer> ingredientList) {
+        ArrayList<String> ingredients = new ArrayList<String>();
+        String ingredientName = "";         //Name of specific ingredient in the burrito, in the order
+        for (int i = 0; i < order.size(); i++) {
+            for (int j = 0; j < order.get(i).size(); j++) {
+                ingredientName = order.get(i).get(j);        //Assigns name of specific ingredient in that loop cycle
+                if (!ingredientList.containsKey(ingredientName) && !ingredientName.contains("no")) {
+                    ingredientList.put(ingredientName, 1);
+                } else if (ingredientList.containsKey(ingredientName)) {
+                    ingredientList.replace(ingredientName, ingredientList.get(ingredientName) + 1);
+                }
+            }
+        }
+
+        for (String key: ingredientList.keySet()) {
+            ingredients.add(ingredientList.get(key) + " " + key);
+        }
+        Collections.sort(ingredients);
+
+        return ingredients;
     }
 }
