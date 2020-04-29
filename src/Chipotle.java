@@ -3,7 +3,7 @@ import java.util.*;
 public class Chipotle {
     public static void main (String[] args) {
         //Variables
-
+        Random random = new Random();
         //These String arrays store the various ingredients in their own category
         String[] rice = {"white rice", "brown rice", "no rice", "all rice"};
         String[] meat = {"chicken", "steak", "carnidas", "chorizo", "sofritas", "veggie meat", "no meat", "all meat"};
@@ -15,9 +15,9 @@ public class Chipotle {
         String[] queso = {"queso"};
         String[] sourCream = {"sour cream"};
 
-        Random random = new Random();
         double price = 3.00;            //base burrito costs $3.00 regardless of ingredients
         double totalPrice = 0;
+        String orderCall = "";          //Store the type and number of ingredients used, and total cost
         //Stores specific ingredients used in each burrito so they can be totaled up later
         ArrayList<String> listOfIngredients = new ArrayList<String>();
 
@@ -51,11 +51,13 @@ public class Chipotle {
 
         //prints how many of each ingredient was used, as well as the total price
         listOfIngredients = getIngredientsList(order, ingredientList);
-        System.out.println("This order has: ");
+        orderCall += "This order has: ";
         for (int i = 0; i < listOfIngredients.size(); i++) {
-            System.out.print(listOfIngredients.get(i) + ", ");
+            orderCall += listOfIngredients.get(i) + ", ";
         }
-        System.out.println("and the sum is $" + totalPrice + "0");
+        orderCall += "and the sum is $" + totalPrice + "0";
+        orderCall = wrap(orderCall, 50);
+        System.out.println(orderCall);
     }
 
     public static ArrayList<String> makeBurrito(Random random, ArrayList<String[]> ingredients) {
@@ -110,5 +112,15 @@ public class Chipotle {
         Collections.sort(ingredients);
 
         return ingredients;
+    }
+
+    public static String wrap (String str, int wrapLength) {
+        StringBuilder sb = new StringBuilder(str);
+        int i = 0;
+        while (i + wrapLength < sb.length() && (i = sb.lastIndexOf(" ", i + wrapLength)) != -1) {
+            sb.replace(i, i + 1, "\n");
+        }
+        str = sb.toString();
+        return str;
     }
 }
