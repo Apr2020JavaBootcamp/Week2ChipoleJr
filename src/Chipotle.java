@@ -62,7 +62,6 @@ public class Chipotle {
 
     public static ArrayList<String> makeBurrito(Random random, ArrayList<String[]> ingredients) {
         ArrayList<String> burrito = new ArrayList<String>();
-        boolean enoughIngredients = false;
         int numIngredients = 5 + random.nextInt(5);
         while (burrito.size() != numIngredients) {
             burrito = new ArrayList<String>();
