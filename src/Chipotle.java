@@ -57,7 +57,7 @@ public class Chipotle {
         }
         orderCall += "and the sum is $" + totalPrice + "0";
         orderCall = wrap(orderCall, 50);
-        System.out.println(orderCall);
+        System.out.println("\n" + orderCall);
     }
 
     public static ArrayList<String> makeBurrito(Random random, ArrayList<String[]> ingredients) {
